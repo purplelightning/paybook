@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.ChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
@@ -29,19 +30,19 @@ public class ChartsActivity extends Activity {
     private Map<String,Integer> table=new TreeMap<>();
     private LineChartData mData;
 
+    private boolean hasAxes=true;
+    private boolean hasAxesNames = true;
+
     @Override
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chart_view);
 
         mChart= (LineChartView) findViewById(R.id.chart);
-        mData=new LineChartData();
         List<CostBean> allDate= (List<CostBean>) getIntent().
                 getSerializableExtra("cost_list");
         generateValues(allDate);
         generateData();
-
-//        mChart=new LineChartView(ChartsActivity.this);
 
     }
 
@@ -60,7 +61,23 @@ public class ChartsActivity extends Activity {
         line.setPointColor(ChartUtils.COLOR_BLUE);
         lines.add(line);
 
-        mData.setLines(lines);
+        mData=new LineChartData(lines);
+//        mData.setLines(lines);
+
+        if(hasAxes){
+            Axis axisX=new Axis();
+            Axis axisY=new Axis().setHasLines(true);
+            if (hasAxesNames) {
+                axisX.setName("Axis X");
+                axisY.setName("Axis Y");
+            }
+            mData.setAxisXBottom(axisX);
+            mData.setAxisYLeft(axisY);
+        } else {
+            mData.setAxisXBottom(null);
+            mData.setAxisYLeft(null);
+        }
+
         mChart.setLineChartData(mData);
     }
 
