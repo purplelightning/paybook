@@ -109,20 +109,20 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_chart) {
-            Intent intent=new Intent(MainActivity.this,ChartsActivity.class);
-            intent.putExtra("cost_list", (Serializable) mList);
-            startActivity(intent);
-            return true;
+        switch (id) {
+            case R.id.action_chart:
+                Intent intent = new Intent(MainActivity.this, ChartsActivity.class);
+                intent.putExtra("cost_list", (Serializable) mList);
+                startActivity(intent);
+                break;
+            case R.id.clear:
+                mDataBaseHelper.deleteAllData();
+                mList.clear();
+                mAdapter.notifyDataSetChanged();
+                break;
+            default:
+                break;
         }
-
-        if(id==R.id.clear){
-            mDataBaseHelper.deleteAllData();
-            mList.clear();
-            mAdapter.notifyDataSetChanged();
-        }
-
         return super.onOptionsItemSelected(item);
     }
 }
